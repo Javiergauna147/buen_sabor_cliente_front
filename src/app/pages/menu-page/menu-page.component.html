@@ -1,0 +1,8 @@
+<div>
+    <app-product-card *ngFor="let product of productos;let i = index" 
+        [id]="product.id"
+        [title]="product.name"
+        [description]="product.description" 
+        imgUrl="" 
+        (onSelect)="selectProduct($event)"></app-product-card>
+</div>
