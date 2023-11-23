@@ -1,7 +1,9 @@
 @import "primeng/resources/themes/saga-orange/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeflex/primeflex.css";
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body {
     font-family: var(--font-family);
     -webkit-font-smoothing: antialiased;
