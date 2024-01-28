@@ -1,3 +1,4 @@
+import { PedidosService } from './services/pedido/pedidos.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -30,6 +31,7 @@ import { ButtonModule } from 'primeng/button';
     CardModule
   ],
   providers: [
+        PedidosService, 
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
