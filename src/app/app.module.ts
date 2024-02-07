@@ -15,6 +15,7 @@ import { MenuPageComponent } from './pages/menu-page/menu-page.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +29,8 @@ import { ButtonModule } from 'primeng/button';
     StyleClassModule,
     ButtonModule,
     NavbarComponent,
-    CardModule
+    CardModule,
+    CommonModule
   ],
   providers: [
         PedidosService, 

@@ -1,15 +1,56 @@
 import { Component } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { Router } from '@angular/router';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
+import { UsuarioResponse } from 'src/app/services/auth/auth.interface';
 
 @Component({
   standalone: true,
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss'],
-  imports: [FormsModule,InputTextModule],
+  imports: [
+    FormsModule,
+    InputTextModule,
+    CardModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    CommonModule
+  ],
 })
 export class LoginPageComponent {
-  email = ""
-  password = ""
+  loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required]
+  })
+
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+
+  submitform(){
+    let userPayload = {
+      email: this.loginForm.value.email as string,
+      password: this.loginForm.value.password as string
+    }
+
+    this.authService.login(userPayload).subscribe({
+      next: (res: UsuarioResponse) => {
+        this.authService.guardarToken(res.token);
+        this.router.navigate(['home']);
+      },
+      error: (e) => {},
+      complete: () => {}
+    });
+  }
+
+  get emailInvalido(): boolean {
+    return this.loginForm.controls.email.invalid && this.loginForm.controls.email.touched
+  }
+
+  get formularioInvalido(): boolean {
+    return this.loginForm.invalid;
+  }
 }
