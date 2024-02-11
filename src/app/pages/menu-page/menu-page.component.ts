@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { Producto, ProductosService } from 'src/app/services/Productos/productos.service';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
 import { Carrito } from 'src/app/services/localStorageManager/storageCarrito/storage-carrito.service';
@@ -6,19 +7,15 @@ import { Carrito } from 'src/app/services/localStorageManager/storageCarrito/sto
 @Component({
   selector: 'app-menu-page',
   templateUrl: './menu-page.component.html',
-  styleUrls: ['./menu-page.component.scss'],
+  styleUrls: ['./menu-page.component.scss']
 })
 export class MenuPageComponent implements OnInit {
 
 
   productos: Producto[] = [];
 
-  constructor(private ProductoService:ProductosService, private CarritoService:CarritoService) {
-    
-  }
+  constructor(private ProductoService:ProductosService, private CarritoService:CarritoService, private messageService: MessageService) {}
  
-  
-
   ngOnInit(): void {
     this.loadProductos();
     this.CarritoService.carritoUpdated.subscribe((newCarrito:Carrito) => {
@@ -28,10 +25,10 @@ export class MenuPageComponent implements OnInit {
   
   async loadProductos(){
     this.productos = await this.ProductoService.getAllProductosDisponibles();
-    console.log(this.productos)
   }
 
   selectProduct(id:String){
     this.CarritoService.addItem(this.productos.find(producto=>producto.id==id)!);
+    this.messageService.add({ severity: 'success', summary: 'Producto agregado al carrito', detail: '' });
   }
 }

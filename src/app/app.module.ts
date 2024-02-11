@@ -8,13 +8,19 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './http-interceptors/token-interceptor';
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { MenuPageComponent } from './pages/menu-page/menu-page.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
+import { RippleModule } from 'primeng/ripple';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,10 +35,15 @@ import { CommonModule } from '@angular/common';
     NavbarComponent,
     CardModule,
     CommonModule,
+    DialogModule,
+    ToastModule,
+    RippleModule,
+    HttpClientModule
   ],
   providers: [
-        PedidosService, 
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
+    PedidosService,
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    MessageService
   ],
   bootstrap: [AppComponent]
 })
