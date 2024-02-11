@@ -1,8 +1,16 @@
-<div>
-    <app-product-card *ngFor="let product of productos;let i = index" 
-        [id]="product.id"
-        [title]="product.name"
-        [description]="product.description" 
-        imgUrl="" 
-        (onSelect)="selectProduct($event)"></app-product-card>
+<div class="grid">
+    <div *ngFor="let producto of productos" class="col-3 mt-8">
+        <p-card [header]="producto.name" [style]="{ width: '360px' }">
+            <ng-template pTemplate="header">
+                <img alt="Card" [src]="producto.image" />
+            </ng-template>
+            <h4>Precio: {{producto.price | currency}}</h4>
+            <p>
+                {{producto.description}}
+            </p>
+            <ng-template pTemplate="footer">
+                <p-button label="Agregar al carrito" severity="info" (onClick)="selectProduct(producto.id)"></p-button>
+            </ng-template>
+        </p-card>
+    </div>
 </div>

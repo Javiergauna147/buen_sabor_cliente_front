@@ -12,15 +12,13 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './http-interceptors/token-interceptor';
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { MenuPageComponent } from './pages/menu-page/menu-page.component';
-import { ProductCardComponent } from './components/product-card/product-card.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
-    MenuPageComponent,
-    ProductCardComponent,
+    MenuPageComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +28,7 @@ import { CommonModule } from '@angular/common';
     ButtonModule,
     NavbarComponent,
     CardModule,
-    CommonModule
+    CommonModule,
   ],
   providers: [
         PedidosService, 

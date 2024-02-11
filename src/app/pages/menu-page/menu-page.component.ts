@@ -6,7 +6,7 @@ import { Carrito } from 'src/app/services/localStorageManager/storageCarrito/sto
 @Component({
   selector: 'app-menu-page',
   templateUrl: './menu-page.component.html',
-  styleUrls: ['./menu-page.component.scss']
+  styleUrls: ['./menu-page.component.scss'],
 })
 export class MenuPageComponent implements OnInit {
 
@@ -28,6 +28,7 @@ export class MenuPageComponent implements OnInit {
   
   async loadProductos(){
     this.productos = await this.ProductoService.getAllProductosDisponibles();
+    console.log(this.productos)
   }
 
   selectProduct(id:String){
