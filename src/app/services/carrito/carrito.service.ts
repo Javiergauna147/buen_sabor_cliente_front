@@ -4,7 +4,7 @@ import { Producto } from '../Productos/productos.service';
 import { Subject } from 'rxjs';
 declare global {
   interface Window {
-    ServicesGetCarrito: () => Promise<Carrito>;
+    ServicesGetCarrito: () => Carrito;
   }
 }
 
@@ -13,7 +13,7 @@ declare global {
 })
 export class CarritoService {
 
-  carritoUpdated = new Subject<Carrito>();
+  public carritoUpdated = new Subject<Carrito>();
 
   constructor(private LSCarrito: StorageCarritoService) { 
     window.ServicesGetCarrito = ()=>this.getCarrito();
@@ -59,8 +59,12 @@ export class CarritoService {
     this.LSCarrito.setItem({id:"",items:[]});
   }
 
-  async getCarrito(): Promise<Carrito>{
+  getCarrito(): Carrito{
     return this.LSCarrito.getItem();
+  }
+
+  carritoRefresh(){
+    this.carritoUpdated.next(this.LSCarrito.getItem());
   }
   async setCarrito(Carrito:Carrito){
     this.LSCarrito.setItem(Carrito);

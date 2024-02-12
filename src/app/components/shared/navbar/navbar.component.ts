@@ -40,6 +40,7 @@ export class NavbarComponent implements OnInit {
       {
         label: 'My Carrito',
         icon: 'pi pi-fw',
+        routerLink: "/carrito"
         },
       {
           label: 'Perfil',
