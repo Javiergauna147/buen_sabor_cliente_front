@@ -19,12 +19,14 @@ import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    MenuPageComponent
+    MenuPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,13 +40,16 @@ import { RippleModule } from 'primeng/ripple';
     DialogModule,
     ToastModule,
     RippleModule,
-    HttpClientModule
+    HttpClientModule,
+    DynamicDialogModule
   ],
   providers: [
     PedidosService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    MessageService
+    MessageService,
+    DialogService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+}

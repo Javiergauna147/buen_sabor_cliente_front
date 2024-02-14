@@ -4,21 +4,32 @@ https://docs.nestjs.com/providers#services
 
 import { Injectable } from '@angular/core';import { Producto } from '../Productos/productos.service';
 import { ProductoCarrito } from '../localStorageManager/storageCarrito/storage-carrito.service';
-;
+
 
 @Injectable()
 export class PedidosService { 
     constructor() {}
 
-    async realizarNuevoPedido(productos:ProductoCarrito[]): Promise<CreatePedidoDto> {
+    async realizarNuevoPedido(productos:ProductoCarrito[], adicionales:{envio:boolean, direccion:string, cupon:string}={envio:false, direccion:"", cupon:""}): Promise<PedidoResponseDto> {
         let bodyJson:string = JSON.stringify({
-            cliente:"",
-            estado:"pendiente",
             productos:productos.map((producto) => ({cantidad:producto.cantidad,producto:producto.id})),
-            precio:0
+            precio:0,
+            adicionales:{
+                envio:{estado:adicionales.envio, direccion:adicionales.direccion},
+                cupon:{estado:adicionales.cupon==""?false:true, codigo:adicionales.cupon}
+            }
         })
-        return await (await fetch("http://localhost:3000/api/pedidio/create", {method:"POST",body:bodyJson})).json()
+        let response =(await window.fetchToken("http://localhost:3000/api/pedido/create", {method:"POST",headers:{
+            "Content-Type":"application/json"
+        },body:bodyJson}))
+        if(response.ok!=true){
+            throw new Error("Error al realizar el pedido")
+        }
+        return await response.json();
     }
+    /*async seleccionPago(pedidoId:string, tipo:string): Promise<PedidoResponseDto>{
+        await window.fetchToken("http://localhost:3000/api/pedido/"+pedidoId+"/pago/"+tipo, {method:"POST"})
+    };*/
 }
 interface ProductosDto {
     cantidad: number;
@@ -30,4 +41,26 @@ export interface CreatePedidoDto {
     estado: string;
     productos: ProductosDto[];
     precio: number;
+}
+
+export interface Pedido{
+        id: string,
+        estado: string,
+        productos: [
+            {
+                cantidad: number,
+                producto: string,
+                precio: number,
+                id: string
+            }
+        ],
+        precio: number,
+        adicionales: {
+            pago: {status: string, value: {medioSeleccionado:string|null, medios: {type:string, link:'',id:''}[]}},
+        }
+}
+
+export interface PedidoResponseDto {
+    pedido: Pedido;
+    message: string
 }

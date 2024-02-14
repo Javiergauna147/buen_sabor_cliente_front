@@ -2,11 +2,6 @@ import { Injectable } from '@angular/core';
 import { Carrito, StorageCarritoService } from '../localStorageManager/storageCarrito/storage-carrito.service';
 import { Producto } from '../Productos/productos.service';
 import { Subject } from 'rxjs';
-declare global {
-  interface Window {
-    ServicesGetCarrito: () => Carrito;
-  }
-}
 
 @Injectable({
   providedIn: 'root'
@@ -56,7 +51,7 @@ export class CarritoService {
   }
 
   async resetCarrito(){
-    this.LSCarrito.setItem({id:"",items:[]});
+    this.carritoUpdated.next(this.LSCarrito.setItem({id:"",items:[]}));
   }
 
   getCarrito(): Carrito{

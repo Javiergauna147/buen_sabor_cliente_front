@@ -17,6 +17,7 @@ export class MenuPageComponent implements OnInit {
   constructor(private ProductoService:ProductosService, private CarritoService:CarritoService, private messageService: MessageService) {}
  
   ngOnInit(): void {
+    console.log("MenuPageComponent");
     this.loadProductos();
     this.CarritoService.carritoUpdated.subscribe((newCarrito:Carrito) => {
       console.log(newCarrito);
