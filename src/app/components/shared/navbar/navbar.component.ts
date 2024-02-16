@@ -48,7 +48,8 @@ export class NavbarComponent implements OnInit {
           items: [
               {
                   label: 'Pedidos',
-                  icon: 'pi pi-fw'
+                  icon: 'pi pi-fw',
+                  routerLink: "/pedidos"
               }
           ]
       }

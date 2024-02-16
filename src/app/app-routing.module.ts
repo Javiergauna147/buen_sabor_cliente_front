@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { MenuPageComponent } from './pages/menu-page/menu-page.component';
 import { CarritoPageComponent } from './pages/carrito-page/carrito-page.component';
+import { PedidoPageComponent } from './pages/pedidos-page/pedidos-page.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,9 @@ const routes: Routes = [
   },
   {
     path: 'carrito', component: CarritoPageComponent,
+  },
+  {
+    path: 'pedidos', component:PedidoPageComponent,
   },
   {
     path: '**', component: MenuPageComponent,

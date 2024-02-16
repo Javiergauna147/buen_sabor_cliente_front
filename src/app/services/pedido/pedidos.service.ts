@@ -30,6 +30,11 @@ export class PedidosService {
     /*async seleccionPago(pedidoId:string, tipo:string): Promise<PedidoResponseDto>{
         await window.fetchToken("http://localhost:3000/api/pedido/"+pedidoId+"/pago/"+tipo, {method:"POST"})
     };*/
+
+    async listaPedidos(): Promise<Pedido[]> {
+        let response = await window.fetchToken("http://localhost:3000/api/pedido/find-all", {method:"GET"})
+        return await response.json();
+    }
 }
 interface ProductosDto {
     cantidad: number;
