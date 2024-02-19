@@ -37,8 +37,11 @@ export class LoginPageComponent {
     }
 
     this.authService.login(userPayload).subscribe({
-      next: (res: UsuarioResponse) => {
-        this.authService.guardarToken(res.token);
+      next: (res: UsuarioResponse & any) => {
+        this.authService.guardarToken(res.token, {
+          _id: res._doc._id,
+          email: res._doc.email
+        });
         this.router.navigate(['home']);
       },
       error: (e) => {},

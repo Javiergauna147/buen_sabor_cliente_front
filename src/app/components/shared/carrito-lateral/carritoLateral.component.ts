@@ -67,6 +67,7 @@ export class CarritoLateral implements OnInit {
         if(pedido.adicionales.pago.value.medioSeleccionado == "enlocal"){
           this.messageService.add({ severity: 'success', summary: 'Pedido realizado', detail: 'El pedido se realizo correctamente' });
           this.onFinalized.emit(pedido.id);
+          this.pedidoService.sendEventUpdatePedido();
         }
         else if(pedido.adicionales.pago.value.medioSeleccionado == "mp")
           this.messageService.add({ severity: 'success', summary: 'Pedido pendiente', detail: 'El pedido se realizo correctamente, pero falta el pago' });

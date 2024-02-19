@@ -3,23 +3,22 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
 import { Usuario, UsuarioResponse } from './auth.interface';
 import { Observable } from 'rxjs';
+import { StorageUserService } from '../localStorageManager/storage-user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  private tokenStorage = localStorage.getItem('token');
   private urlUsuario: string = environment.API_BASE_ENDPOINT + '/auth';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private LSuserService:StorageUserService) { }
 
   login(user: Usuario): Observable<UsuarioResponse>{
     return this.http.post<UsuarioResponse>(`${this.urlUsuario}/login`, user);
   }
 
-  guardarToken(token: string) {
-    localStorage.setItem('token', token);
+  guardarToken(token: string, user: Usuario) {
+    this.LSuserService.setItem({id: user._id!, name: "", email: user.email, token: token});
   }
 
   createUser(user: Usuario): Observable<any>{
@@ -27,6 +26,6 @@ export class AuthService {
   }
 
   obtenerToken(): string | null {
-    return this.tokenStorage;
+    return this.LSuserService.getItem().token;
   }
 }

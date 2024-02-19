@@ -51,6 +51,14 @@ export class PedidoPageComponent implements OnInit{
   }
   
   ngOnInit(): void {
+    
+    this.pedidosService.socketUpdatePedido().subscribe((pedido)=>{
+      this.pedidosService.listaPedidos().then((pedidoss)=>{
+        console.log("updatePedidos");
+        this.pedidos = pedidoss;
+      })
+    })
+    
     this.pedidosService.listaPedidos().then((pedidoss) => {
       console.log(pedidoss);
       this.pedidos = pedidoss;

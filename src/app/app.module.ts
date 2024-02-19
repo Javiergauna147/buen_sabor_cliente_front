@@ -1,3 +1,4 @@
+import { StorageUserService } from './services/localStorageManager/storage-user.service';
 import { PedidosService } from './services/pedido/pedidos.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -20,7 +21,9 @@ import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {autoConnect:true} };
 
 
 @NgModule({
@@ -30,6 +33,7 @@ import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
   ],
   imports: [
     BrowserModule,
+    SocketIoModule.forRoot(config),
     AppRoutingModule,
     BrowserAnimationsModule,
     StyleClassModule,
@@ -44,12 +48,13 @@ import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
     DynamicDialogModule
   ],
   providers: [
+    StorageUserService,
     PedidosService,
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     MessageService,
     DialogService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
+export class AppModule {
 }

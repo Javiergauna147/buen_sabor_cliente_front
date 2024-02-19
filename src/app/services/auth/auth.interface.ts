@@ -1,4 +1,5 @@
 export interface UsuarioResponse {
+    [x: string]: { _doc: string; } | any;
     ok: boolean,
     usuario: Usuario,
     token: string

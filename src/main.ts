@@ -8,7 +8,6 @@ declare global {
   }
 }
 
-window.fetchToken = (input: RequestInfo | URL, init?: RequestInit)=>fetch(input, {...init, headers: {...init?.headers, "Authorization": `Bearer ${localStorage.getItem("token") || ''}`}});
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));

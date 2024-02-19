@@ -4,11 +4,13 @@ https://docs.nestjs.com/providers#services
 
 import { Injectable } from '@angular/core';import { Producto } from '../Productos/productos.service';
 import { ProductoCarrito } from '../localStorageManager/storageCarrito/storage-carrito.service';
+import { Socket } from 'ngx-socket-io';
+import { StorageUserService } from '../localStorageManager/storage-user.service';
 
 
 @Injectable()
 export class PedidosService { 
-    constructor() {}
+    constructor(private socket:Socket, private LSuserService:StorageUserService ) {}
 
     async realizarNuevoPedido(productos:ProductoCarrito[], adicionales:{envio:boolean, direccion:string, cupon:string}={envio:false, direccion:"", cupon:""}): Promise<PedidoResponseDto> {
         let bodyJson:string = JSON.stringify({
@@ -34,6 +36,17 @@ export class PedidosService {
     async listaPedidos(): Promise<Pedido[]> {
         let response = await window.fetchToken("http://localhost:3000/api/pedido/find-all", {method:"GET"})
         return await response.json();
+    }
+
+    socketUpdatePedido(){
+        let user = this.LSuserService.getItem();
+        this.socket.removeAllListeners()
+        return this.socket.fromEvent<string>(user.id +'_changeStatusPedido');
+    }
+
+    sendEventUpdatePedido(){
+        let user = this.LSuserService.getItem();
+        this.socket.emit('changeStatusPedido',user.id)
     }
 }
 interface ProductosDto {
