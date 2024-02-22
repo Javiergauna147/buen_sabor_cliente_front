@@ -1,18 +1,33 @@
-
-
 <div class="grid">
-    <div *ngFor="let producto of productos" class="col-3 mt-8">
-        <p-card [header]="producto.name" [style]="{ width: '360px' }">
-            <ng-template pTemplate="header">
-                <img alt="Card" [src]="producto.image" />
-            </ng-template>
-            <h4>Precio: {{producto.price | currency}}</h4>
-            <p>
-                {{producto.description}}
-            </p>
-            <ng-template pTemplate="footer">
-                <p-button label="Agregar al carrito" severity="info" (onClick)="selectProduct(producto.id)"></p-button>
-            </ng-template>
-        </p-card>
+    <div *ngFor="let producto of productos" [ngClass]="'product-card'" class="col-3 mt-8">
+        <div (click)="showQuickView(producto)">
+            <p-card [header]="producto.name" [style]="{ width: '360px'}" >
+                <ng-template pTemplate="header">
+                    <img alt="Card" [src]="producto.image" class="product-image" />
+                </ng-template>
+                <h4 class="p-card-title">{{producto.price | currency}}</h4>
+                <p class="p-card-subtitle">{{producto.description}}</p>
+                <ng-template pTemplate="footer">
+                    <p-footer [ngClass]="'p-card-footer'">
+                        <button pButton type="button" label="Agregar al carrito" [ngClass]="'add-button'" icon="pi pi-cart-plus"
+                            (click)="selectProduct($event,producto.id)" style="width: 100%;"></button>
+                    </p-footer>
+                </ng-template>
+            </p-card>
+        </div>
+    </div>
+</div>
+
+<div class="quick-view-overlay" *ngIf="showQuickViewFlag" (click)="hideQuickView()">
+    <div class="quick-view">
+        <button class="close-button" (click)="hideQuickView()">X</button>
+        <div class="product-details">
+        <h2>{{selectedProduct.name}}</h2>
+        <p>{{selectedProduct.price}}</p>
+        <!-- Otros detalles del producto -->
+    </div>
+    <div class="actions">
+        <button pButton type="button" icon="pi pi-cart-plus" label="Agregar" class="quick-add-button" (click)="selectProduct($event,selectedProduct.id)"></button>
+        <button pButton type="button" icon="pi pi-times" label="Quitar" severity="secondary" [ngClass]="'quick-quit-button'" (click)="removeFromCart(selectedProduct.id)"></button>
     </div>
 </div>
