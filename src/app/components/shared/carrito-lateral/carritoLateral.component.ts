@@ -6,6 +6,7 @@ import { Pedido, PedidosService } from 'src/app/services/pedido/pedidos.service'
 import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfiguracionPagoPopUp } from '../../pago/configuracionPago';
+import { AuthService } from 'src/app/services/auth/auth.service';
 @Component({
   standalone: true,
   selector: 'app-shop-carritoLateral',
@@ -14,7 +15,7 @@ import { ConfiguracionPagoPopUp } from '../../pago/configuracionPago';
   imports: [CommonModule]
 })
 export class CarritoLateral implements OnInit {
-    constructor(public carritoService:CarritoService, public pedidoService: PedidosService, public messageService:MessageService,public dialogService: DialogService) {}
+    constructor(public carritoService:CarritoService, public pedidoService: PedidosService, public messageService:MessageService,public dialogService: DialogService,  private authService:AuthService ) {}
     carrito: Carrito |null = {id:"",items:[]};
     pedido!: Pedido | null;
     @Output() onFinalized: EventEmitter<String> = new EventEmitter<String>();
@@ -34,8 +35,8 @@ export class CarritoLateral implements OnInit {
         return;
       }
       let pedido: any;
-      const token = localStorage.getItem('token') || '';
-      if(token == ''){
+      const token =  this.authService.obtenerToken() || '';
+      if(token === ''){
         this.messageService.add({ severity: 'error', summary: 'usuario no logueado', detail: 'No se pudo realizar el pedido' });
         return;
       }
@@ -60,7 +61,9 @@ export class CarritoLateral implements OnInit {
         width: '80%',
         contentStyle: { 'max-height': '500px', overflow: 'auto' },
         baseZIndex: 10000,
-        data: this.pedido
+        data: this.pedido,
+        closable: false,
+        closeOnEscape: false
       });
       this.ref.onClose.subscribe((pedido:Pedido) => {
         this.pedido = pedido;
