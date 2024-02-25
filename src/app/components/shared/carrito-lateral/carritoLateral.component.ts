@@ -1,4 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
 import { Carrito } from 'src/app/services/localStorageManager/storageCarrito/storage-carrito.service';
 import {CommonModule} from '@angular/common';
@@ -11,7 +13,7 @@ import { ConfiguracionPagoPopUp } from '../../pago/configuracionPago';
   selector: 'app-shop-carritoLateral',
   templateUrl: './carritoLateral.component.html',
   styleUrls: ['./carritoLateral.component.scss'],
-  imports: [CommonModule]
+  imports: [CommonModule, TableModule, ButtonModule]
 })
 export class CarritoLateral implements OnInit {
     constructor(public carritoService:CarritoService, public pedidoService: PedidosService, public messageService:MessageService,public dialogService: DialogService) {}

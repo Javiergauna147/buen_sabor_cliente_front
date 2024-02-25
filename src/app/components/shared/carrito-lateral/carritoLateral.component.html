@@ -1,27 +1,56 @@
-<div class="">  
-    <div class="">
-        <div class="">
-            <h3 class="">Carrito</h3>
+
+<p-table  [value]="carrito?.items || []"  [tableStyle]="{'min-width': '60rem'}">
+    <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between">
+            Productos
+           <!--  <button pButton type="button" [ngClass]="'add-button'" icon="pi pi-refresh"
+                          style="width: 100%;"></button>-->
+            <p-button [ngClass]="'add-button'" icon="pi pi-refresh"></p-button>
         </div>
-        <div class="" *ngFor="let item of carrito?.items">
-            <div class="">
-                <h4 class="">{{item.name}}</h4>
-                <p class="">{{item.description}}</p>
-                <p class="">{{item.cantidad}}</p>
-                <p class="">{{item.subTotal | currency:'$ '}}</p>
-            </div>
-            <div class="">
-                <button class="" (click)="carritoService.addItem(item)">+</button>
-                <button class="" (click)="carritoService.removeItem(item)">-</button>
-                <button class="" (click)="carritoService.deleteItem(item)">x</button>
-            </div>
+    </ng-template>
+    <ng-template pTemplate="header" *ngIf="carrito && carrito.items && carrito.items.length > 0; else noProducts">
+        <tr>
+            <th>Nombre</th>
+            <th>Imagen</th>
+            <th>Precio</th>
+            <th>Descripcion</th>
+            <th>Acciones</th>
+            
+        </tr>
+    </ng-template>
+    <ng-template #noProducts>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td>{{item.name}}</td>
+            <td><img [src]="item.image" [alt]="item.name" width="100" class="shadow-4" /></td>
+            <td>{{item.price| currency:'USD'}}</td>
+            <td>{{item.description}}</td>
+            <td>
+                <div class="">
+                    <p-button [ngClass]="'add-button'" icon="pi pi-plus" (click)="carritoService.addItem(item)"></p-button>
+                    <p-button [ngClass]="'add-button'"  icon="pi pi-minus" (click)="carritoService.removeItem(item)"></p-button>
+                    <p-button [ngClass]="'add-button'" icon="pi pi-trash" (click)="carritoService.deleteItem(item)"></p-button>
+                </div>
+            </td>
+            </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="flex align-items-center justify-content-between">
+            <ng-container *ngIf="carrito && carrito.items && carrito.items.length > 0; else noProducts">
+                In total there are {{ carrito.items.length }} products.
+            
+                    <p class="">Total: {{carrito?.total| currency:'$ '}}</p>
+                    <div class="">
+                    <p-button [ngClass]="'add-button'" label="Pagar" icon="pi pi-shopping-bag" (click)="finalizarCompra()"></p-button>
+                    <p-button [ngClass]="'add-button'" label="Cerrar" icon="pi pi-times" ></p-button>
+                    </div>
+            </ng-container>
+            <ng-template #noProducts>
+                No hay productos agregados.
+            </ng-template>
         </div>
-        <div>
-            <p class="">Total: {{carrito?.total| currency:'$ '}}</p>
-        </div>
-        <div class="">
-            <button class="">Cerrar</button>
-            <button class="" (click)="finalizarCompra()">Comprar</button>
-        </div>
-</div>
-</div>
+    </ng-template>
+</p-table>
+
+

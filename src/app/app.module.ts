@@ -45,7 +45,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {autoCon
     ToastModule,
     RippleModule,
     HttpClientModule,
-    DynamicDialogModule
+    DynamicDialogModule 
   ],
   providers: [
     StorageUserService,
