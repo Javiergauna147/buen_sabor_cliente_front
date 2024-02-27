@@ -2,17 +2,35 @@
 https://docs.nestjs.com/providers#services
 */
 
-import { Injectable } from '@angular/core';import { Producto } from '../Productos/productos.service';
+import { Injectable, OnInit } from '@angular/core';import { Producto } from '../Productos/productos.service';
 import { ProductoCarrito } from '../localStorageManager/storageCarrito/storage-carrito.service';
 import { Socket } from 'ngx-socket-io';
 import { StorageUserService } from '../localStorageManager/storage-user.service';
+import { Observable } from 'rxjs';
 
 
 @Injectable()
-export class PedidosService { 
+export class PedidosService implements OnInit { 
     constructor(private socket:Socket, private LSuserService:StorageUserService ) {}
+    
+    private eventObservable: Observable<{
+        type: string;
+        data: {
+            user_cliente: string;
+            pedido: string;
+            nuevoEstado: string;
+        };
+    }> | null = null;
+    private isLogged:boolean = false;
+
+    ngOnInit(): void {
+        if(this.LSuserService.getItem().id!="")
+            this.sendLoginEvent();
+    }
 
     async realizarNuevoPedido(productos:ProductoCarrito[], adicionales:{envio:boolean, direccion:string, cupon:string}={envio:false, direccion:"", cupon:""}): Promise<PedidoResponseDto> {
+        if(this.LSuserService.getItem().id!="")
+            this.sendLoginEvent();
         let bodyJson:string = JSON.stringify({
             productos:productos.map((producto) => ({cantidad:producto.cantidad,producto:producto.id})),
             precio:0,
@@ -27,7 +45,9 @@ export class PedidosService {
         if(response.ok!=true){
             throw new Error("Error al realizar el pedido")
         }
-        return await response.json();
+        let pedido = await response.json();
+        this.sendEventCreatedPedido((pedido).pedido.id);
+        return pedido;
     }
     /*async seleccionPago(pedidoId:string, tipo:string): Promise<PedidoResponseDto>{
         await window.fetchToken("http://localhost:3000/api/pedido/"+pedidoId+"/pago/"+tipo, {method:"POST"})
@@ -35,18 +55,53 @@ export class PedidosService {
 
     async listaPedidos(): Promise<Pedido[]> {
         let response = await window.fetchToken("http://localhost:3000/api/pedido/find-all", {method:"GET"})
+        if(this.LSuserService.getItem().id!="")
+            this.sendLoginEvent();
         return await response.json();
     }
 
     socketUpdatePedido(){
-        let user = this.LSuserService.getItem();
-        this.socket.removeAllListeners()
-        return this.socket.fromEvent<string>(user.id +'_changeStatusPedido');
+        if(this.LSuserService.getItem().id!="")
+            this.sendLoginEvent();
+        if(this.eventObservable)
+            return this.eventObservable;
+        else{
+            this.eventObservable = this.socket.fromEvent<{
+                type: string,
+                data: {
+                    user_cliente: string,
+                    pedido: string,
+                    nuevoEstado: string
+                }
+            }>('pedido_update');
+            return this.eventObservable;
+        }
     }
 
-    sendEventUpdatePedido(){
+    public sendEventCreatedPedido(pedido:string){
         let user = this.LSuserService.getItem();
-        this.socket.emit('changeStatusPedido',user.id)
+        this.socket.emit('pedido',{
+            "type": "pedido_update",
+            "data": {
+                "user_cliente": user.id,
+                "pedido": pedido,
+                "nuevoEstado": "EN PREPARACION"
+            }
+        })
+    }
+
+    sendLoginEvent(){
+        if(!this.isLogged){
+            let user = this.LSuserService.getItem();
+            this.socket.emit('join',{
+                "type":"join_cliente",
+                "data":{
+                    "user":user.id
+                }
+            })
+            this.socket.fromEvent('disconnect').subscribe(()=>this.isLogged=false);
+            this.isLogged = true;
+        }
     }
 }
 interface ProductosDto {

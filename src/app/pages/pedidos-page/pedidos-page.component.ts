@@ -44,7 +44,7 @@ export class PedidoPageComponent implements OnInit{
   constructor(private router: Router, private pedidosService: PedidosService) {
     this.itemsPasos = [
       {label: 'Solicitado', id: 'SOLICITADO', },
-      {label: 'Pago', id: 'EN PREPARACIÓN'},
+      {label: 'Pago', id: 'EN PREPARACION'},
       {label: 'Preparado', id: 'LISTO PARA RETIRAR'},
       {label: 'En camino', id: 'EN CAMINO'},
       {label: 'Entregado', id: 'FINALIZADO'}
@@ -57,7 +57,7 @@ export class PedidoPageComponent implements OnInit{
   
   ngOnInit(): void {
     
-    this.pedidosService.socketUpdatePedido().subscribe((pedido)=>{
+    this.pedidosService.socketUpdatePedido().subscribe((event)=>{
       this.pedidosService.listaPedidos().then((pedidoss)=>{
         console.log("updatePedidos");
         this.pedidos = pedidoss;
