@@ -16,18 +16,23 @@ import { ConfiguracionPagoPopUp } from '../../pago/configuracionPago';
   imports: [CommonModule, TableModule, ButtonModule]
 })
 export class CarritoLateral implements OnInit {
+
     constructor(public carritoService:CarritoService, public pedidoService: PedidosService, public messageService:MessageService,public dialogService: DialogService) {}
     carrito: Carrito |null = {id:"",items:[]};
     pedido!: Pedido | null;
     @Output() onFinalized: EventEmitter<String> = new EventEmitter<String>();
 
     ngOnInit(): void {
+   
       this.carritoService.carritoUpdated.subscribe({
         next: (newCarrito:Carrito) => {
            this.carrito = newCarrito
         }
       });
       this.carritoService.carritoRefresh();
+      this.carritoService.finalizarCompra$.subscribe(() => {
+        this.finalizarCompra();
+      });
     }
 
     async finalizarCompra(){

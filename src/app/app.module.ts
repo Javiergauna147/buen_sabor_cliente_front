@@ -20,8 +20,11 @@ import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
+import { TableModule } from 'primeng/table';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { SidebarModule } from 'primeng/sidebar';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { CarritoSidebarComponent } from './components/shared/carrito-sidebar/carrito-sidebar.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {autoConnect:true} };
 
@@ -30,6 +33,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {autoCon
   declarations: [
     AppComponent,
     MenuPageComponent,
+    CarritoSidebarComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,9 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {autoCon
     ToastModule,
     RippleModule,
     HttpClientModule,
-    DynamicDialogModule 
+    DynamicDialogModule,
+    SidebarModule,
+    TableModule
   ],
   providers: [
     StorageUserService,

@@ -9,7 +9,9 @@ import { Subject } from 'rxjs';
 export class CarritoService {
 
   public carritoUpdated = new Subject<Carrito>();
-
+  private finalizarCompraSubject: Subject<void> = new Subject<void>();
+  finalizarCompra$ = this.finalizarCompraSubject.asObservable();
+  
   constructor(private LSCarrito: StorageCarritoService) { 
     window.ServicesGetCarrito = ()=>this.getCarrito();
   }
@@ -74,6 +76,10 @@ export class CarritoService {
     });
     carrito.total = total;
     this.LSCarrito.setItem(carrito);
+  }
+
+  finalizarCompra(): void {
+    this.finalizarCompraSubject.next();
   }
   
 }

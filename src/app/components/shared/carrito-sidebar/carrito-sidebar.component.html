@@ -1,0 +1,38 @@
+<!-- sidebar.component.html -->
+<p-sidebar #sidebarCarrito [(visible)]="mostrarSidebar" position="right" [showCloseIcon]="true" [blockScroll]="true" [style]="{ 'width': '30%' }">
+    <ng-container *ngIf="carrito && carrito.items && carrito.items.length > 0; else noProducts">
+            <div class="carrito-items-container">
+                <div class="carrito-item" *ngFor="let item of carrito.items">
+                    <div class="carrito-item-content">
+                        <h3>{{ item.name }}</h3>
+                        <img [src]="item.image" [alt]="item.name" width="100" class="shadow-4" />
+                        <p>Precio: {{ item.price | currency:'USD' }}</p>
+                        <p>Descripción: {{ item.description }}</p>
+                    </div>
+                    <div class="carrito-item-actions">
+                        <p-button [ngClass]="'add-button'" icon="pi pi-plus" (click)="carritoService.addItem(item)"></p-button>
+                        <p-button [ngClass]="'add-button'" icon="pi pi-minus" (click)="carritoService.removeItem(item)"></p-button>
+                        <p-button [ngClass]="'add-button'" icon="pi pi-trash" (click)="carritoService.deleteItem(item)"></p-button>
+                    </div>
+                </div>
+            </div>
+    </ng-container>
+    <ng-template #noProducts>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="flex align-items-center justify-content-between">
+            <ng-container *ngIf="carrito && carrito.items && carrito.items.length > 0; else noProducts">
+                In total there are {{ carrito.items.length }} products.
+            
+                    <p class="">Total: {{carrito?.total| currency:'$ '}}</p>
+                    <div class="">
+                    <p-button [ngClass]="'add-button'" label="Pagar" icon="pi pi-shopping-bag" (click)="finalizarCompra()"></p-button>
+                    <p-button [ngClass]="'add-button'" label="Cerrar" icon="pi pi-times" ></p-button>
+                    </div>
+            </ng-container>
+            <ng-template #noProducts>
+                No hay productos agregados.
+            </ng-template>
+        </div>
+    </ng-template>
+</p-sidebar>

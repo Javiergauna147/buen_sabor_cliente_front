@@ -1,1 +1,15 @@
-<p-menubar [model]="items"></p-menubar>
+<p-menubar [model]="items">
+    <ng-template pTemplate="start">
+      <img src="https://www.svgrepo.com/show/287733/burger.svg" height="50" class="mr-2" />
+    </ng-template>
+    <ng-template pTemplate="end">
+      <!-- Eliminamos el input text y agregamos el ícono de carrito -->
+      <!-- Utilizamos la propiedad badge para mostrar la cantidad de elementos en el carrito 
+      Quitamos tambien el link al componente de carrito completo con
+    [routerLink]="['/carrito']"-->
+    <a (click)="toggleSidebar()" class="p-menuitem-link" role="menuitem" aria-haspopup="false">
+      <span class="p-menuitem-icon pi pi-shopping-cart"></span>
+        <span class="p-menuitem-badge">{{cantidadItemsCarrito}}</span>
+      </a>
+    </ng-template>
+  </p-menubar>
