@@ -11,13 +11,14 @@ declare global {
     MercadoPago: any;
   }
 }
+
 @Component({
     selector: 'app-pedidos-page',
     standalone: true,
     template: `
     <div>
     <p-card *ngFor="let item of this.pedidos" [header]="item.id + ': ' + item.estado">
-      <p-steps [model]="itemsPasos" [readonly]="true"></p-steps>
+      <p-steps [model]="itemsPasos" [readonly]="true" [activeIndex]="seachItem(item.estado)"></p-steps>
       <ul>
         <li *ngFor="let producto of item.productos">
           {{producto.producto}} x {{producto.cantidad}}
@@ -42,17 +43,21 @@ export class PedidoPageComponent implements OnInit{
   public itemsPasos: MenuItem[];
   constructor(private router: Router, private pedidosService: PedidosService) {
     this.itemsPasos = [
-      {label: 'Solicitado'},
-      {label: 'Pago'},
-      {label: 'Preparado'},
-      {label: 'En camino'},
-      {label: 'Entregado'}
+      {label: 'Solicitado', id: 'SOLICITADO', },
+      {label: 'Pago', id: 'EN PREPARACION'},
+      {label: 'Preparado', id: 'LISTO PARA RETIRAR'},
+      {label: 'En camino', id: 'EN CAMINO'},
+      {label: 'Entregado', id: 'FINALIZADO'}
     ];
+  }
+
+  seachItem(estado: string) : number{
+    return this.itemsPasos.findIndex(({id})=>(id?.toLowerCase()===estado.toLocaleLowerCase()))
   }
   
   ngOnInit(): void {
     
-    this.pedidosService.socketUpdatePedido().subscribe((pedido)=>{
+    this.pedidosService.socketUpdatePedido().subscribe((event)=>{
       this.pedidosService.listaPedidos().then((pedidoss)=>{
         console.log("updatePedidos");
         this.pedidos = pedidoss;

@@ -26,6 +26,6 @@ export class AuthService {
   }
 
   obtenerToken(): string | null {
-    return this.LSuserService.getItem().token;
+    return (this.LSuserService.getItem().token)?this.LSuserService.getItem().token:null;
   }
 }
