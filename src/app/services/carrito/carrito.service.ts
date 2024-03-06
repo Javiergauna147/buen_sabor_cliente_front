@@ -25,8 +25,7 @@ export class CarritoService {
     }else{
       carrito.items.push({...producto,cantidad:1,subTotal:0});
     }
-    this.LSCarrito.setItem(carrito);
-    this.calculateCarrito();
+    this.LSCarrito.setItem(this.calculateCarrito(carrito));
     this.carritoUpdated.next(this.LSCarrito.getItem());
   }
 
@@ -39,16 +38,14 @@ export class CarritoService {
         carrito.items = carrito.items.filter(item=>item.id!=producto.id);
       }
     }
-    this.LSCarrito.setItem(carrito);
-    this.calculateCarrito();
+    this.LSCarrito.setItem(this.calculateCarrito(carrito));
     this.carritoUpdated.next(this.LSCarrito.getItem());
   }
 
   async deleteItem(producto:Producto){
     let carrito = this.LSCarrito.getItem();
     carrito.items = carrito.items.filter(item=>item.id!=producto.id);
-    this.LSCarrito.setItem(carrito);
-    this.calculateCarrito();
+    this.LSCarrito.setItem(this.calculateCarrito(carrito));
     this.carritoUpdated.next(this.LSCarrito.getItem());
   }
 
@@ -67,15 +64,14 @@ export class CarritoService {
     this.LSCarrito.setItem(Carrito);
   }
 
-  public calculateCarrito(){
-    let carrito = this.LSCarrito.getItem();
+  public calculateCarrito(carrito:Carrito){
     let total = 0;
     carrito.items.forEach(item=>{
       item.subTotal = item.cantidad * Number(item.price);
       total += item.subTotal;
     });
     carrito.total = total;
-    this.LSCarrito.setItem(carrito);
+    return {...carrito};
   }
 
   finalizarCompra(): void {

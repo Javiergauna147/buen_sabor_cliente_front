@@ -13,15 +13,17 @@ import { Carrito } from 'src/app/services/localStorageManager/storageCarrito/sto
 
 
 export class CarritoSidebarComponent implements OnInit {
-  mostrarSidebar = true;
+  mostrarSidebar = false;
+  habilitarSidebar = true;
   carrito: Carrito | null = { id: "", items: [] };
 
   constructor(public  carritoService: CarritoService, private router: Router, private sidebarService: SidebarService) { }
 
   ngOnInit(): void {
-    this.sidebarService.getSidebarVisibility().subscribe(mostrar => {
-      this.mostrarSidebar = mostrar;
-    });
+    this.sidebarService.getSidebarVisibility().subscribe({
+      next: mostrar => {
+      this.mostrarSidebar = mostrar && this.habilitarSidebar;
+    }});
     
     this.carritoService.carritoUpdated.subscribe({
       next: (newCarrito: Carrito) => {
@@ -35,8 +37,10 @@ export class CarritoSidebarComponent implements OnInit {
     // Suscribirse a eventos de navegación para determinar si se debe mostrar el sidebar
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.mostrarSidebar = !this.router.url.includes('app-shop-carritoLateral');
+        console.log(this.router.url)
+        this.habilitarSidebar = !this.router.url.includes('carrito');
       }
+      this.sidebarService.setValue(false);
     });
   }
 

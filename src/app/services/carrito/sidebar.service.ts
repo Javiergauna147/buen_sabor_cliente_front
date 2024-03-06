@@ -14,6 +14,10 @@ export class SidebarService {
     this.mostrarSidebarSubject.next(!currentValue);
   }
 
+  setValue(newstatus:boolean): void {
+    this.mostrarSidebarSubject.next(newstatus);
+  }
+
   getSidebarVisibility(): Observable<boolean> {
     return this.mostrarSidebarSubject.asObservable();
   }
