@@ -27,8 +27,13 @@ export class MenuPageComponent implements OnInit {
     });
   }
 
-  async loadProductos() {
-    this.productos = await this.ProductoService.getAllProductosDisponibles();
+  loadProductos() {
+    this.ProductoService.getAllProductosDisponibles().subscribe({
+      next: (data) => {
+        this.productos = data;
+        console.log(data)
+      }
+    })
   }
 
   selectProduct(event: Event,id: String) {

@@ -2,7 +2,8 @@
 https://docs.nestjs.com/providers#services
 */
 
-import { Injectable, OnInit } from '@angular/core';import { Producto } from '../Productos/productos.service';
+import { Injectable, OnInit } from '@angular/core';
+import { Producto } from '../Productos/productos.service';
 import { ProductoCarrito } from '../localStorageManager/storageCarrito/storage-carrito.service';
 import { Socket } from 'ngx-socket-io';
 import { StorageUserService } from '../localStorageManager/storage-user.service';

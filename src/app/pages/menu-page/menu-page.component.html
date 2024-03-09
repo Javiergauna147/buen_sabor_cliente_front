@@ -3,7 +3,7 @@
         <div  style="cursor: pointer;">
             <p-card [header]="producto.name" [style]="{ width: '400px'}">
                 <ng-template pTemplate="header">
-                    <img alt="Card" [src]="producto.image" class="product-image" />
+                    <img alt="Card" [src]="producto.image[0]?.data" class="product-image" />
                 </ng-template>
                 <h4 class="p-card-title">{{producto.price | currency}}</h4>
                 <p class="p-card-subtitle">{{producto.description}}</p>
