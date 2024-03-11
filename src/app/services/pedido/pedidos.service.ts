@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class PedidosService implements OnInit { 
-    constructor(private socket:Socket, private LSuserService:StorageUserService ) {}
+    constructor(private socket:Socket, private LSuserService:StorageUserService) {}
     
     private eventObservable: Observable<{
         type: string;
@@ -30,6 +30,7 @@ export class PedidosService implements OnInit {
     }
 
     async realizarNuevoPedido(productos:ProductoCarrito[], adicionales:{envio:boolean, direccion:string, cupon:string}={envio:false, direccion:"", cupon:""}): Promise<PedidoResponseDto> {
+        
         if(this.LSuserService.getItem().id!="")
             this.sendLoginEvent();
         let bodyJson:string = JSON.stringify({

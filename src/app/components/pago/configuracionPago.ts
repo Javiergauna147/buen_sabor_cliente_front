@@ -26,7 +26,7 @@ export class ConfiguracionPagoPopUp {
   }
 
   ngOnInit() {
-    
+    this.pedido = this.config.data;
   }
 
   seleccion(medioDePago:string){

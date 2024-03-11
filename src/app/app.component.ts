@@ -17,6 +17,7 @@ export class AppComponent implements OnInit{
     window.fetchToken = (input: RequestInfo | URL, init?: RequestInit)=>fetch(input, {...init, headers: {...init?.headers, "Authorization": `Bearer ${this.LSuserService.getItem().token || ''}`}});
     this.pedidoService.socketUpdatePedido().subscribe((event)=>{
       console.log(event);
+      this.messageService.clear();
       this.messageService.add({ severity: 'info', summary: 'Tu pedido se ha actualizado', detail: '' , life: 5000});
     });
   }

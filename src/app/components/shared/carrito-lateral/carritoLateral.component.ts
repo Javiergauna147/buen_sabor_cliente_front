@@ -9,6 +9,7 @@ import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfiguracionPagoPopUp } from '../../pago/configuracionPago';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { Router } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-shop-carritoLateral',
@@ -17,7 +18,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   imports: [CommonModule, TableModule, ButtonModule]
 })
 export class CarritoLateral implements OnInit {
-    constructor(public carritoService:CarritoService, public pedidoService: PedidosService, public messageService:MessageService,public dialogService: DialogService,  private authService:AuthService ) {}
+    constructor(public carritoService:CarritoService, public pedidoService: PedidosService, public messageService:MessageService,public dialogService: DialogService,  private authService:AuthService, private router:Router ) {}
     carrito: Carrito |null = {id:"",items:[]};
     pedido!: Pedido | null;
     @Output() onFinalized: EventEmitter<String> = new EventEmitter<String>();
@@ -43,7 +44,8 @@ export class CarritoLateral implements OnInit {
       let pedido: any;
       const token =  this.authService.obtenerToken() || '';
       if(token === ''){
-        this.messageService.add({ severity: 'error', summary: 'usuario no logueado', detail: 'No se pudo realizar el pedido' });
+        this.messageService.add({ severity: 'error', summary: 'usuario no logueado', detail: 'No se pudo realizar el pedido', life: 2000});
+        this.router.navigate(['login'], { queryParams: { redirect: 'carrito' } });
         return;
       }
       try{
@@ -72,14 +74,20 @@ export class CarritoLateral implements OnInit {
         closeOnEscape: false
       });
       this.ref.onClose.subscribe((pedido:Pedido) => {
-        this.pedido = pedido;
-        if(pedido.adicionales.pago.value.medioSeleccionado == "enlocal"){
+        console.log(pedido)
+        console.log(this.pedido)
+        if(pedido != undefined)
+          this.pedido = pedido;
+        if(this.pedido!.adicionales.pago.value.medioSeleccionado == "enlocal"){
+          this.messageService.clear();
           this.messageService.add({ severity: 'success', summary: 'Pedido realizado', detail: 'El pedido se realizo correctamente' });
           this.onFinalized.emit(pedido.id);
           this.pedidoService.sendEventCreatedPedido(pedido.id);
         }
-        else if(pedido.adicionales.pago.value.medioSeleccionado == "mp")
+        else if(this.pedido!.adicionales.pago.value.medioSeleccionado == "mp"){
           this.messageService.add({ severity: 'success', summary: 'Pedido pendiente', detail: 'El pedido se realizo correctamente, pero falta el pago' });
+          this.pedidoService.sendEventCreatedPedido(pedido.id);
+        }
       });
     }
 

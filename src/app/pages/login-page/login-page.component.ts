@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -27,8 +27,11 @@ export class LoginPageComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
   })
+  urlTree: UrlTree;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+    this.urlTree = this.router.parseUrl(this.router.url);
+  }
 
   submitform(){
     let userPayload = {
@@ -42,7 +45,9 @@ export class LoginPageComponent {
           _id: res._doc._id,
           email: res._doc.email
         });
-        this.router.navigate(['home']);
+
+        var redirectTo = this.urlTree.queryParams['redirect'] || 'home';
+        this.router.navigate([redirectTo]);
       },
       error: (e) => {},
       complete: () => {}
